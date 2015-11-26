@@ -263,9 +263,52 @@ filter (fn [x] (odd? x))
                                               (conj ans c)
                                               ans)))))
 
+;;gcd
+(defn gcd [x y]
+  (let [rem (mod x y)]
+    (if (= 0 rem)
+      y
+      (gcd y rem)
+      )))
 
-;;grep
-(defn grep [ re coll]
-  (filter (fn [x]
-            (re-find re (str x)))
-          coll))
+;;cartesian product
+(defn cartesianproduct [s1 s2]
+  (loop [coll1 s1
+         res #{}]
+    (if (empty? coll1)
+      res
+      (recur(rest coll1) (into res (map #(vector (first coll1) %) s2))))))
+
+
+
+;;LCM
+
+(defn lcmof2numbers [a b] (/ (* a b) (gcd a b)))
+
+
+(defn lcmofnnumbers [y] (reduce lcmof2numbers y))
+
+(defn lcmofnratios [z] (let [lcd (lcmofnnumbers (map denominator z))]
+                         (/ (reduce #(* %1 %2) (map #(* lcd %) z)) lcd)))
+
+(defn lcm[x]
+  (let [structure ( group-by type  x)
+        ratios (get structure clojure.lang.Ratio)
+        numbers (get structure java.lang.Long)]
+    (lcmof2numbers (lcmofnnumbers numbers) (lcmofnratios ratios))
+    ))
+
+
+;;Symmetric Difference
+
+#(clojure.set/difference (clojure.set/union %1 %2) (clojure.set/intersection %1 %2))
+
+
+;;pascal
+
+(defn pascal [n]
+  (cond (= n 1) [1]
+        (= n 2) [1 1]
+        :else (conj (first
+                     (reduce (fn [[r l] x] [(conj r (+ l x)) x]) [[] 0] (pascal (dec n))))
+                    1)))
