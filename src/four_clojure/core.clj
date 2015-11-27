@@ -228,18 +228,16 @@ filter (fn [x] (odd? x))
 
 ;;prime numbers
 
-(defn prime? [n]
-  (if (even? n) false
-      (let [root (num (int (Math/sqrt n)))]
-        (loop [i 3]
-          (if (> i root) true
-              (if (zero? (mod n i)) false
-                  (recur (+ i 2))))))))
+(defn is-prime? [num]
+  (if (< num 2)
+    false
+    (empty? (filter (fn [x]
+                      (if (= 0 (mod num x)) true false )) (range 2 num)))))
 
-(defn n-primes [n]
-  (loop [num 2 p []]
-    (if (>= (count p) n) p
-        (recur (inc num) (if (prime? num) (concat p [num]) p)))))
+(defn prime-seq [n]
+  "This function returns the given size of prime numbers"
+  (vec (take n (filter is-prime? (iterate inc 0)))))
+
 
 ;;perfect numbers
 
