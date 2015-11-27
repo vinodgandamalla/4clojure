@@ -1,4 +1,5 @@
-(ns four-clojure.core)
+(ns four-clojure.core
+  (:require  [clojure.string :as cstr]))
 
 4
 
@@ -51,12 +52,11 @@
 
 ;; count a sequence
 (defn count-seq [input]
-  (let [coll (seq input)]
-    (loop [c coll
-           ans 0]
-      (if (empty? c)
-        ans
-        (recur (next c) (inc ans))))))
+  (loop [c (seq input)
+         ans 0]
+    (if (empty? c)
+      ans
+      (recur (rest c) (inc ans)))))
 
 
 ;;reverse a sequnce
@@ -73,7 +73,7 @@
 
 ;;sum it all up
 
-(fn [coll]
+(defn sum [coll]
   (loop [c coll
          ans 0]
     (if (empty? c)
@@ -88,10 +88,12 @@ reduce +
 
 
 ;;palindrome detector
-(defn palindrome [coll] (if (coll? coll)
-                          (= coll (reverse coll))
-                          (= coll (apply str (reverse coll)))
-                          ))
+
+(defn pal [x]
+  (if (coll? x)
+    (= x (reverse x))
+    (= x ( cstr/reverse x))))
+
 ;;flatten a sequence
 (fn flt [coll]
   (let [l (first coll) r (next coll)]
@@ -115,9 +117,7 @@ reduce +
                            ans 1]
                       (if (= n 0)
                         ans
-                        (recur (dec n) (* ans n) )
-                        )
-                      ))
+                        (recur (dec n) (* ans n)))))
 
 
 ;;duplicate a sequence
@@ -142,18 +142,13 @@ mapcat (fn [x] (vector x x))
   (count (re-seq #"C|c" coll)))
 
 ;;maximum value
-(defn maximumvalue [& x] (reduce #(if (> %1 %2) %1 %2) x))
 
-
-(defn maximumelement [& x]
-  (loop [m 0 x x
-         ]
-    (if (empty? x)
-      m
-      (recur (if (> (first x) m)
-               (first x)
-               m) (rest x)))))
-
+(defn max2 [x y]
+  (if (> x y)
+    x
+    y))
+(defn maxn [& z]
+  (reduce max2 z))
 
 ;;interleave
 (defn inter [seq1 seq2]
@@ -260,16 +255,14 @@ filter (fn [x] (odd? x))
                            (if (< c 2)
                              ans
                              (recur (dec c) (if (isperfect? c)
-                                              (conj ans c)
-                                              ans)))))
+                                              (conj ans c) ans)))))
 
 ;;gcd
 (defn gcd [x y]
   (let [rem (mod x y)]
     (if (= 0 rem)
       y
-      (gcd y rem)
-      )))
+      (gcd y rem))))
 
 ;;cartesian product
 (defn cartesianproduct [s1 s2]
@@ -278,7 +271,6 @@ filter (fn [x] (odd? x))
     (if (empty? coll1)
       res
       (recur(rest coll1) (into res (map #(vector (first coll1) %) s2))))))
-
 
 
 ;;LCM
@@ -295,20 +287,9 @@ filter (fn [x] (odd? x))
   (let [structure ( group-by type  x)
         ratios (get structure clojure.lang.Ratio)
         numbers (get structure java.lang.Long)]
-    (lcmof2numbers (lcmofnnumbers numbers) (lcmofnratios ratios))
-    ))
+    (lcmof2numbers (lcmofnnumbers numbers) (lcmofnratios ratios))))
 
 
 ;;Symmetric Difference
 
 #(clojure.set/difference (clojure.set/union %1 %2) (clojure.set/intersection %1 %2))
-
-
-;;pascal
-
-(defn pascal [n]
-  (cond (= n 1) [1]
-        (= n 2) [1 1]
-        :else (conj (first
-                     (reduce (fn [[r l] x] [(conj r (+ l x)) x]) [[] 0] (pascal (dec n))))
-                    1)))
