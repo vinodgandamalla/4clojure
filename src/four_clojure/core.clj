@@ -203,7 +203,7 @@ mapcat (fn [x] (vector x x))
     (if (empty? coll)
       ans
       (recur (next coll) (if (coll? (first coll))
-                           (into ans (flat (first coll) ))
+                           (into ans (flat (first coll)))
                            (conj ans (first coll)))))))
 
 
@@ -291,3 +291,20 @@ filter (fn [x] (odd? x))
 ;;Symmetric Difference
 
 #(clojure.set/difference (clojure.set/union %1 %2) (clojure.set/intersection %1 %2))
+
+
+;;partition a sequence
+
+(defn partseq [x y]
+  (loop [ans2 []
+         ans1 y]
+    (if (empty? ans1)
+      ans2
+      (recur (if (= x (count (take x ans1)))
+               (conj ans2 (take x ans1)) ans2) (drop x ans1)))))
+
+
+;;frequencies
+
+(defn freq [a]
+  (into {} (map (fn [[x y]] [x (count y)]) (group-by identity a))))
