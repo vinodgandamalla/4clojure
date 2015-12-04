@@ -320,23 +320,6 @@ filter (fn [x] (odd? x))
   (fn [& as] (map #(apply % as) fs)))
 
 
-;;sequence reductions
-
-(defn redseq [& x]
-  (let [f (first x)
-        k '(6)] (println f)
-       (map (fn [z]  (into k (apply f z k)))  (rest x))))
-
-
-(defn redseq1 [& x]
-  (let [o (first x)]
-    (loop [coll (rest x)
-           res []]
-      (if (empty? coll)
-        res
-        (recur (rest coll)(conj res (apply o (first coll) res )))))))
-
-
 ;;map construction
 
 #(apply hash-map (interleave %1 %2))
@@ -380,7 +363,7 @@ filter (fn [x] (odd? x))
              (next (swaping (first c) c))))))
 
 
-;; find
+;; find an element
 (defn myfind [coll ele]
 
   (loop [c (seq coll)
@@ -412,3 +395,8 @@ filter (fn [x] (odd? x))
       (recur (next c1) (if(myfind coll2 (first c1))
                          (conj res (first c1))
                          res)))))
+
+
+
+
+;;bubble sort
