@@ -308,3 +308,107 @@ filter (fn [x] (odd? x))
 
 (defn freq [a]
   (into {} (map (fn [[x y]] [x (count y)]) (group-by identity a))))
+
+
+;;function composition
+
+(defn mycomp [& fs] (reduce (fn [f g] #(f (apply g %&))) fs))
+
+;;juxtaposition
+
+(defn juxtaposition [& fs]
+  (fn [& as] (map #(apply % as) fs)))
+
+
+;;sequence reductions
+
+(defn redseq [& x]
+  (let [f (first x)
+        k '(6)] (println f)
+       (map (fn [z]  (into k (apply f z k)))  (rest x))))
+
+
+(defn redseq1 [& x]
+  (let [o (first x)]
+    (loop [coll (rest x)
+           res []]
+      (if (empty? coll)
+        res
+        (recur (rest coll)(conj res (apply o (first coll) res )))))))
+
+
+;;map construction
+
+#(apply hash-map (interleave %1 %2))
+
+
+;;unique elements
+
+(defn uniquecoll [x]
+  (distinct x))
+
+
+(defn uniq [x]
+  (vals (loop [coll x
+               newmap {}]
+          (if (empty? coll)
+            newmap
+            (recur (next coll) (if (contains? newmap (first coll))
+                                 newmap
+                                 (assoc newmap (first coll) (first coll))))))))
+
+
+;;sorting a collection using selection sort algorithm
+
+(defn min-two [x y]
+  (if (< x y) x y))
+(defn min-idx [coll]
+  (.indexOf coll (reduce min-two coll)))
+
+
+(defn swaping [ele c]
+  (let [coll (vec c)
+        idx (min-idx coll)]
+    (concat (subvec coll 0 idx ) [ele] (subvec coll (inc idx)))))
+
+(defn selection-sort1 [coll]
+  (loop [result []
+         c coll]
+    (if (empty? c)
+      result
+      (recur (conj result (nth c (min-idx c)))
+             (next (swaping (first c) c))))))
+
+
+;; find
+(defn myfind [coll ele]
+
+  (loop [c (seq coll)
+         v false]
+    (if(or (= v true) (empty? c))
+      v
+      (recur (next c) (if (= (first c) ele)
+                        true
+                        false)))))
+
+(defn myfind1 [ele coll]
+  (loop [c coll]
+    (if (empty? c)
+      false
+      (if (= (first c) ele)
+        true
+        (recur (next c) )))))
+
+
+;; intersection of collections
+
+
+
+(defn myintersection [coll1 coll2]
+  (loop [c1 (seq coll1)
+         res []]
+    (if(empty? c1)
+      res
+      (recur (next c1) (if(myfind coll2 (first c1))
+                         (conj res (first c1))
+                         res)))))
