@@ -327,10 +327,6 @@ filter (fn [x] (odd? x))
 
 ;;unique elements
 
-(defn uniquecoll [x]
-  (distinct x))
-
-
 (defn uniq [x]
   (vals (loop [coll x
                newmap {}]
