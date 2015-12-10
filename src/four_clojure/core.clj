@@ -393,6 +393,74 @@ filter (fn [x] (odd? x))
                          res)))))
 
 
+;;uniq1
+
+(defn uniq1 [coll]
+  (loop [coll coll
+         res []]
+    (if(empty? coll)
+      res
+      (recur (next coll) (if(= (first coll) (last res))
+                           res
+                           (conj res (first coll)))))))
 
 
-;;bubble sort
+
+;;partition1
+
+(defn partition1 [coll]
+  (split-with (partial = (first coll))coll))
+
+
+;;group1
+
+(defn group1 [coll]
+  (loop [coll coll
+         res []]
+    (if(empty? coll)
+      res
+      (recur (second (split-with (partial = (first coll)) coll)) (conj res (first (split-with (partial = (first coll)) coll)))))))
+
+
+
+;;compress1
+
+(defn compress1 [coll1]
+  (map list (uniq1 coll1) (map count (group1 coll1))))
+
+
+;;map using recursion
+(defn mymap[func coll]
+  (if (nil? (next coll))
+    (cons (func (first coll)) '())
+    (cons (func (first coll)) (mymap func (rest coll)))))
+
+
+
+;; filter using recursion
+(defn filter11 [pred coll]
+  (if(nil? (next coll))
+    (if (pred (first coll))
+      (cons (first coll) '())
+      '())
+    (if(pred (first coll))
+      (cons (first coll) (filter11 pred (rest coll)))
+      (filter11 pred (rest coll)))))
+
+
+
+;; every? using recursion
+
+
+(defn myevery [pred coll]
+  (if(nil? (next coll))
+    (pred (first coll))
+    (and (pred (first coll)) (myevery pred (next coll)))))
+
+
+;;any using recursion
+
+(defn myany [pred coll]
+  (if(nil? (next coll))
+    (pred (first coll))
+    (or (pred (first coll)) (myany pred (next coll)))))
