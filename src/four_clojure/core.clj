@@ -464,3 +464,40 @@ filter (fn [x] (odd? x))
   (if(nil? (next coll))
     (pred (first coll))
     (or (pred (first coll)) (myany pred (next coll)))))
+
+
+
+;; duplicate the sequence
+
+(defn duplica [coll]
+  (if (nil? (next coll))
+    (cons (first coll) (cons (first coll) '()))
+    (cons (first coll) (cons (first coll) (duplica (rest coll))))))
+
+
+;;return last element of a collection
+
+
+(defn returnlastelement [coll]
+  (if(nil? (next coll))
+    (first coll)
+    (returnlastelement (next coll))))
+
+
+
+;;return penultimate element of a collection
+
+(defn return_penultimate_element [coll]
+  (if(nil? (next (next coll)))
+    (first coll)
+    (return_penultimate_element (next coll))))
+
+
+
+;; reverse of a collection using recursion
+
+(defn reverc [coll]
+  (let [c (seq coll)]
+    (if c
+      (conj (reverc (rest c)) (first c))
+      [])))
