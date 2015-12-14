@@ -501,3 +501,41 @@ filter (fn [x] (odd? x))
     (if c
       (conj (reverc (rest c)) (first c))
       [])))
+
+
+
+
+
+;;partitionz
+
+(defn partitionz [pred coll]
+  (list (filter pred coll) (remove pred coll)))
+
+
+
+;;group the sorted collection
+
+(defn grouppp [coll]
+  (if (empty? coll)
+    '()
+    (cons (first (partitionz (fn [x] (= x (first coll))) coll)) (grouppp (second (partitionz (fn [x] (= x (first coll))) coll))))))
+
+
+;;compress the sorted collection
+
+(defn compresz [coll]
+  (map (fn [x] (list (first x) (count x))) (grouppp coll)))
+
+
+
+;;split-at
+
+(defn mysplit-at [k coll]
+  (loop [acc []
+         n k
+         left coll]
+    (if (zero? n)
+      [acc left]
+      (recur (conj acc (first left))
+             (dec n)
+             (rest left)))))
