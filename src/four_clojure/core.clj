@@ -539,3 +539,64 @@ filter (fn [x] (odd? x))
       (recur (conj acc (first left))
              (dec n)
              (rest left)))))
+
+
+;; drop every kth element
+
+(defn dropevery-kth-element [k coll]
+  (loop [n k
+         c coll
+         ans []]
+    (if (empty? c)
+      ans
+      (if (= n 1)
+        (recur k (rest c) ans)
+        (recur (dec k) (rest c) (conj ans (first c)))))))
+
+
+;; return every kth element
+
+(defn return-everykth-element [k coll]
+  (loop [n k
+         c coll
+         ans []]
+    (if (empty? c)
+      ans
+      (if (= n 1)
+        (recur k (rest c) (conj ans (first c)))
+        (recur (dec k) (rest c) ans)))))
+
+
+
+
+;; sort the lists of lists according to length of the lists
+
+(defn compare-numbers [x y]
+  (if (> x y)
+    x
+    y))
+
+
+(defn compare-lists [c1 c2]
+  (< (count c1) (count c2)))
+
+
+(defn sort-list-of-lists [coll]
+  (sort compare-lists coll))
+
+
+;; uncompress the lists
+
+(defn uncompress [coll]
+  (loop [coll coll
+         ans []]
+    (if (empty? coll)
+      ans
+      (recur (rest coll) (into ans (extend1 (first (first coll)) (second (first coll))))))))
+
+(defn extend1 [y z]
+  (loop [n z
+         ans []]
+    (if(= n 0)
+      ans
+      (recur (dec n)(conj ans y)))))
