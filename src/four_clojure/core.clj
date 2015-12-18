@@ -602,7 +602,7 @@ filter (fn [x] (odd? x))
 
 
 
-;; frequency of a word in a paragraph
+;;cy of a word in a paragraph
 
 (defn counttheoccurences [word paragraph]
   (let [p (cstr/split paragraph #"\s+")]
