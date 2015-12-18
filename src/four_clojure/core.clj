@@ -576,7 +576,6 @@ filter (fn [x] (odd? x))
     x
     y))
 
-
 (defn compare-lists [c1 c2]
   (< (count c1) (count c2)))
 
@@ -587,6 +586,13 @@ filter (fn [x] (odd? x))
 
 ;; uncompress the lists
 
+(defn extend1 [y z]
+  (loop [n z
+         ans []]
+    (if(= n 0)
+      ans
+      (recur (dec n)(conj ans y)))))
+
 (defn uncompress [coll]
   (loop [coll coll
          ans []]
@@ -594,9 +600,10 @@ filter (fn [x] (odd? x))
       ans
       (recur (rest coll) (into ans (extend1 (first (first coll)) (second (first coll))))))))
 
-(defn extend1 [y z]
-  (loop [n z
-         ans []]
-    (if(= n 0)
-      ans
-      (recur (dec n)(conj ans y)))))
+
+
+;; frequency of a word in a paragraph
+
+(defn counttheoccurences [word paragraph]
+  (let [p (cstr/split paragraph #"\s+")]
+    (count (filter #(= word %) p))))
