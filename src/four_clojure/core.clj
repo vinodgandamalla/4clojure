@@ -602,8 +602,23 @@ filter (fn [x] (odd? x))
 
 
 
-;;cy of a word in a paragraph
+;;frequency of a word in a paragraph
 
 (defn counttheoccurences [word paragraph]
   (let [p (cstr/split paragraph #"\s+")]
     (count (filter #(= word %) p))))
+
+
+;;closures
+
+(defn find-operator [a]
+  (let [c (str (type a))]
+    (case c
+      "class java.lang.Long" +
+      "class java.lang.Character" str
+      "class clojure.lang.PersistentVector" concat
+      "default")))
+
+(defn do-op [a & z]
+  (let [f (find-operator a)]
+    (reduce f a z)))
