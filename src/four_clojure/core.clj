@@ -617,7 +617,7 @@ filter (fn [x] (odd? x))
       "class java.lang.Long" +
       "class java.lang.Character" str
       "class clojure.lang.PersistentVector" concat
-      "default")))
+      )))
 
 (defn do-op [a & z]
   (let [f (find-operator a)]
