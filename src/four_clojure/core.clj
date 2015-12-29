@@ -622,3 +622,24 @@ filter (fn [x] (odd? x))
 (defn do-op [a & z]
   (let [f (find-operator a)]
     (reduce f a z)))
+
+
+;;every word frequency
+
+(defn freq11 [word coll]
+  (count (filter #(= word %) coll)))
+
+(defn counteverywordfreq [coll]
+  (distinct (map (fn[w] (list w (freq11 w coll))) coll)))
+
+;; every word frequency using closure
+
+(defn freq12 [coll]
+  (fn [word]
+    (list word (count (filter #(= word %) coll)))))
+
+(defn frequencies1 [coll]
+  (distinct (reduce (fn [x y]
+                      (conj x ((freq12 coll) y)))
+                    []
+                    coll)))
